@@ -1,0 +1,27 @@
+---
+title: "Tentang Olivia"
+toc: false
+---
+
+::: {.profile-hero}
+![Foto Olivia Meilinda Dvatin Pesireron](images/olivia-profile.png){.profile-photo}
+
+::: {.profile-text}
+✦ **HALO, KENALAN YUK!** ✦
+
+### Olivia Meilinda Dvatin Pesireron
+
+Mahasiswa Institut Teknologi Sains Bandung  
+NIM **52240011** · Kelas **SDT-2024**
+:::
+:::
+
+## Tentang halaman ini
+
+Halaman ini dibuat untuk mendokumentasikan pengerjaan UTS Pengantar Big Data. Isinya mencakup jawaban pilihan ganda, esai, dan praktik pengolahan data pada studi kasus dompet digital BayarYuk.
+
+## Apa yang dikerjakan?
+
+Pada bagian praktik, data merchant dan transaksi dipelajari melalui kueri NoSQL, pemrosesan log dengan Spark RDD, analisis Spark DataFrame, simulasi streaming, dan eksplorasi data. Setiap bagian dilengkapi kode, penjelasan, serta pembahasan hasilnya.
+
+Semoga halaman ini membantu menjelaskan proses dan hasil belajar Big Data dengan lebih mudah. ✨

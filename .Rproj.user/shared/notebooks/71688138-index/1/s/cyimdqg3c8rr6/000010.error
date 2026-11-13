@@ -1,0 +1,1 @@
+{"frames":[],"message":"Error in py_run_string(\"\\nc1a_df = pd.DataFrame(list(\\n    merchant_collection.find(\\n        {'kategori': 'Kuliner', 'kota': 'Bandung', 'promo': 'cashback', 'rating': {'$gte': 4.0}},\\n        {'_id': 0, 'nama': 1, 'rating': 1, 'promo': 1}\\n    ).sort('rating', -1)\\n))\\n\") : \n  could not find function \"py_run_string\"\n"}

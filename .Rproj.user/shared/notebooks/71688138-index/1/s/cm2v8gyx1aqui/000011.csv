@@ -1,0 +1,7 @@
+"0","# Tabel melengkapi grafik agar semua angka tepat mudah dibaca."
+"0","tabel_jam <- data.frame("
+"0","  Jam = sprintf(""%02d:00"", sukses_per_jam$jam),"
+"0","  `Transaksi sukses` = sukses_per_jam$jumlah_transaksi,"
+"0","  check.names = FALSE"
+"0",")"
+"0","knitr::kable(tabel_jam, caption = ""Jumlah transaksi sukses pada setiap jam"", format.args = list(big.mark = "".""))"

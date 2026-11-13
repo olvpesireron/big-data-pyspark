@@ -1,0 +1,907 @@
+---
+title: "UTS Pengantar Big Data"
+author: "Olivia Meilinda Dvatin Pesireron (52240011)"
+format:
+  html:
+    toc: true
+    toc-location: left
+execute:
+  echo: true
+---
+
+```{=html}
+<!--
+SKELETON SAJA - isi seluruh jawaban, alasan, kode, output, dan insight dengan pekerjaanmu sendiri.
+Ganti NIM, Nama Lengkap, serta URL video sebelum Knit.
+Gunakan chunk setup-spark dan uts-data dari BD_P08_UTS.Rmd resmi tanpa mengubahnya.
+-->
+```
+
+**Institusi:** Institut Teknologi Sains Bandung\
+**Nama:** Olivia Meilinda Davtin Pesireron\
+**NIM:** 52240011\
+**Kelas:** SDT-2024
+
+:::: profile-hero
+<img src="images/olivia-profile.png" alt="Foto Olivia Meilinda Dvatin Pesireron" class="profile-photo"/>
+
+::: profile-text
+```         
+<p class="profile-kicker">✦ PORTOFOLIO UTS ✦</p>
+<p class="profile-name">Olivia Meilinda Dvatin Pesireron</p>
+<p class="profile-detail">52240011 · Institut Teknologi Sains Bandung</p>
+```
+:::
+::::
+
+# Bagian A - Pilihan Ganda
+
+> Bagian ini berisi soal pilihan ganda mengenai konsep dasar Big Data, NoSQL, HDFS, Spark, dan pengolahan data. Setiap jawaban dilengkapi alasan singkat untuk menjelaskan mengapa pilihan tersebut dianggap paling tepat.
+
+## A1
+
+**Data GPS 2 juta pengemudi ojek daring yang diperbarui setiap 3 detik paling menonjol pada karakteristik ...**
+
+(a) Variety
+
+(b) Velocity
+
+(c) Veracity
+
+(d) Value
+
+**Jawaban:** (b) Velocity
+
+**Alasan:** Velocity menunjukkan kecepatan data masuk dan diperbarui. Data GPS yang diperbarui setiap 3 detik lebih menonjol pada kecepatan dibandingkan variasi (Variety), keakuratan (Veracity), atau manfaat data (Value).
+
+## A2
+
+**Basis data yang paling tepat untuk menyimpan sesi login dengan masa berlaku 30 menit adalah ...**
+
+(a) Neo4j
+
+(b) MongoDB
+
+(c) Redis
+
+(d) HDFS
+
+**Jawaban:** (c) Redis
+
+**Alasan:** Redis cocok untuk menyimpan sesi login karena aksesnya cepat dan memiliki fitur TTL (Time to Live) untuk menghapus sesi otomatis setelah 30 menit. MongoDB lebih cocok untuk dokumen, Neo4j untuk hubungan antarentitas, dan HDFS untuk file besar.
+
+## A3
+
+**Pada MongoDB, tahap aggregation pipeline yang memecah elemen array menjadi dokumen terpisah adalah ...**
+
+(a) \$match
+
+(b) \$group
+
+(c) \$unwind
+
+(d) \$project
+
+**Jawaban:** (c) \$unwind
+
+**Alasan:** `$unwind` digunakan untuk memecah setiap elemen array menjadi dokumen terpisah. Berbeda dengan `$match` untuk menyaring data, `$group` untuk mengelompokkan data, dan `$project` untuk memilih atau mengatur field.
+
+## A4
+
+**Berkas 700 MB diunggah ke HDFS dengan blok 128 MB dan replikasi 3. Jumlah blok dan ruang disk yang terpakai adalah ...**
+
+(a) 5 blok, 700 MB
+
+(b) 6 blok, 2.100 MB
+
+(c) 6 blok, 2.304 MB
+
+(d) 18 blok, 2.304 MB
+
+**Jawaban:** (b) 6 blok, 2.100 MB
+
+**Alasan:** Jumlah blok adalah 700 ÷ 128 = 5,47, dibulatkan menjadi 6 blok. Dengan replikasi 3, ruang disk yang digunakan adalah 700 × 3 = 2.100 MB, bukan 2.304 MB karena blok terakhir tidak terisi penuh.
+
+## A5
+
+**Komponen HDFS yang menyimpan metadata lokasi blok adalah ...**
+
+(a) DataNode
+
+(b) NameNode
+
+(c) Secondary NameNode
+
+(d) ResourceManager
+
+**Jawaban:** (b) NameNode
+
+**Alasan:** NameNode menyimpan metadata, termasuk informasi lokasi blok dalam HDFS. DataNode menyimpan data sebenarnya, Secondary NameNode membantu checkpoint metadata, sedangkan ResourceManager mengelola sumber daya YARN.
+
+## A6
+
+**Operasi Spark berikut yang merupakan aksi adalah ...**
+
+(a) map
+
+(b) filter
+
+(c) reduceByKey
+
+(d) count
+
+**Jawaban:** (d) count
+
+**Alasan:** count() merupakan action karena menjalankan komputasi dan menghasilkan jumlah elemen RDD. Sementara map, filter, dan reduceByKey termasuk transformation karena menghasilkan RDD baru.
+
+## A7
+
+**Untuk menjumlahkan nilai per kunci pada pair RDD besar, operasi yang paling efisien adalah ...**
+
+(a) groupByKey().mapValues(sum)
+
+(b) reduceByKey(lambda a, b: a + b)
+
+(c) collect() lalu dijumlah di Python
+
+(d) sortByKey()
+
+**Jawaban:** (b) reduceByKey(lambda a, b: a + b)
+
+**Alasan:** reduceByKey lebih efisien karena menjumlahkan nilai dengan kunci sama secara lokal sebelum mengirim data antar-node. Berbeda dengan groupByKey yang memindahkan lebih banyak data, collect() yang membebani memori lokal, dan sortByKey() yang hanya mengurutkan kunci.
+
+## A8
+
+**Mengapa skema eksplisit lebih disarankan daripada inferSchema=True pada pipeline produksi?**
+
+(a) Skema eksplisit membuat data terkompresi
+
+(b) Lebih cepat, tidak salah tebak tipe, dan terdokumentasi
+
+(c) inferSchema tidak dapat membaca CSV
+
+(d) Skema eksplisit wajib untuk Parquet
+
+**Jawaban:** (b) Lebih cepat, tidak salah tebak tipe, dan terdokumentasi
+
+**Alasan:** Skema eksplisit menentukan tipe data sejak awal sehingga lebih konsisten dan menghindari kesalahan inferensi tipe. Berbeda dengan inferSchema=True yang perlu memeriksa data untuk menebak tipe, skema eksplisit juga membuat struktur data lebih jelas dan mudah dipelihara.
+
+## A9
+
+**Topic Kafka memiliki 4 partisi dan consumer group memiliki 6 konsumen. Berapa konsumen yang aktif membaca?**
+
+(a) 2
+
+(b) 4
+
+(c) 6
+
+(d) 24
+
+**Jawaban:** (b) 4
+
+**Alasan:** Dalam satu consumer group Kafka, satu partisi hanya dapat dibaca oleh satu konsumen pada waktu yang sama. Karena hanya tersedia 4 partisi, maksimal 4 konsumen aktif membaca, sedangkan 2 konsumen lainnya menganggur.
+
+## A10
+
+**Cara yang benar membuat histogram kolom jarak_km dari 2 miliar baris adalah ...**
+
+(a) df.toPandas()\["jarak_km"\].hist()
+
+(b) df.collect() lalu plt.hist
+
+(c) Menghitung jumlah per bin dengan groupBy di Spark, lalu menggambar hasilnya
+
+(d) Mengambil 10 baris pertama
+
+**Jawaban:** (c) Menghitung jumlah per bin dengan groupBy di Spark, lalu menggambar hasilnya
+
+**Alasan:** Spark dapat menghitung jumlah data per interval secara terdistribusi tanpa memindahkan seluruh 2 miliar baris ke memori lokal. Berbeda dengan toPandas() dan collect() yang berisiko kehabisan memori, sedangkan mengambil 10 baris tidak mewakili keseluruhan data.
+
+# Bagian B - Esai Singkat
+
+## B1 - Jelaskan perbedaan scale-up dan scale-out, dan jelaskan mengapa fase shuffle pada MapReduce/Spark merupakan bagian yang paling mahal.
+
+Jawaban:
+
+Scale-up ituuu adalah meningkatkan kemampuan satu server, misalnya dengan menambah RAM atau CPU agar lebih kuat. Sedangkan scale-out adalah menambah jumlah server supaya pekerjaan bisa dibagi dan dikerjakan bersama-sama. Fase shuffle pada MapReduce/Spark membutuhkan biaya proses paling besar soalnya data tu harus dipindahkan dari satu server ke server lain melalui jaringan. Proses ini butuh waktu dan sumber daya yang besar, terutama jika datanya sangat banyak.
+
+## B2 - Sebuah marketplace membutuhkan: (i) katalog produk dengan atribut berbeda per kategori, (ii) keranjang belanja sementara, dan (iii) rekomendasi "teman Anda juga membeli". Pilih basis data NoSQL untuk masing-masing dan jelaskan alasannya.
+
+Jawaban:
+
+1.  Katalog produk menggunakan MongoDB, karena bisa menyimpan produk dengan informasi yang berbeda-beda. Misalnya, produk baju memiliki ukuran dan warna, sedangkan HP memiliki RAM dan kapasitas penyimpanan.
+
+2.  Keranjang belanja menggunakan Redis, karena bisa menyimpan dan mengambil data dengan cepat. Redis juga bisa menghapus data keranjang secara otomatis setelah waktu tertentu menggunakan fitur TTL.
+
+3.  Rekomendasi teman menggunakan Neo4j, karena dapat menyimpan hubungan antara pengguna, teman, dan produk yang dibeli. Jadi, sistem lebih mudah mencari produk yang pernah dibeli oleh teman pengguna.
+
+## B3 - Jelaskan konsep lazy evaluation dan lineage pada Spark, serta manfaat masing-masing.
+
+Jawaban:
+
+Lazy evaluation adalah cara kerja Spark yang tidak langsung menjalankan perintah pengolahan data, tetapi menunggu sampai ada perintah yang meminta hasil, seperti count() atau collect(). Manfaatnya, Spark bisa mengatur proses terlebih dahulu agar pekerjaan lebih cepat dan efisien.
+
+Lineage adalah catatan urutan proses yang dilakukan Spark untuk menghasilkan data. Manfaatnya, jika ada data yang hilang karena server bermasalah, Spark bisa membuat ulang bagian data yang hilang berdasarkan catatan proses tersebut tanpa mengulang semuanya dari awal.
+
+## B4 - Jelaskan perbedaan jaminan pengiriman at-most-once dan at-least-once, dan bagaimana checkpoint pada Spark Structured Streaming membantu mencegah data hilang atau terproses ganda.
+
+Jawaban:
+
+At-most-once berarti data hanya diproses paling banyak satu kali, tetapi ada kemungkinan data hilang jika terjadi gangguan. At-least-once berarti data dipastikan diproses minimal satu kali, tetapi ada kemungkinan data yang sama diproses berulang. Checkpoint pada Spark Structured Streaming berfungsi untuk menyimpan catatan sampai mana data sudah diproses. Jadi, jika sistem tiba-tiba berhenti, Spark bisa melanjutkan dari proses terakhir yang tercatat tanpa harus mengulang semuanya. Hal ini membantu mengurangi risiko data hilang atau diproses dua kali, tetapi untuk benar-benar mencegah hasil ganda, sistem penyimpanan hasil juga harus mendukungnya.
+
+# Bagian C – Praktik Coding Studi Kasus Dompet Digital BayarYuk
+
+## Pendahuluan
+
+Pada bagian ini dilakukan pengolahan data dari aplikasi dompet digital BayarYuk. Data yang digunakan terdiri dari data merchant, catatan transaksi, dan transaksi baru yang masuk melalui file JSON. Pengolahan dilakukan secara bertahap supaya data yang kurang sesuai dapat diketahui, hasil transaksi dapat dihitung, dan informasi pentingnya bisa dijelaskan dengan lebih mudah.
+
+Data merchant terdiri dari 200 dokumen yang berisi informasi seperti nama, kategori, kota, rating, promo, dan sebagian data jam buka. Data log berisi 400.000 baris transaksi, termasuk beberapa baris yang rusak serta nominal yang tidak wajar. Selain itu, tersedia tiga file JSON untuk simulasi streaming, dengan 500 event pada setiap file.
+
+Tujuan praktik ini adalah memahami cara menggunakan MongoDB untuk mencari dan meringkas merchant, Spark RDD untuk membersihkan log, Spark DataFrame untuk analisis transaksi, Structured Streaming untuk memproses data masuk, dan EDA untuk menghasilkan grafik serta insight. Kode dijalankan berurutan karena beberapa hasil digunakan kembali pada bagian selanjutnya.
+
+## Persiapan Lingkungan dan Dataset
+
+Bagian ini menyiapkan Spark dan dataset yang akan digunakan selama praktik. Chunk `setup-spark` membuat sesi Spark, sedangkan `uts-data` menghasilkan data merchant, log transaksi, dan file JSON. Kedua chunk berasal dari materi awal dan bagian pembangkit dataset tetap dipertahankan.
+
+```{r setup-spark, eval=FALSE}
+library(reticulate)
+
+# Java disiapkan untuk sesi R ini sebelum Spark dijalankan.
+Sys.setenv(JAVA_HOME = "C:/Program Files/Eclipse Adoptium/jdk-17.0.21.9-hotspot")
+Sys.setenv(HADOOP_HOME = "C:/hadoop")
+Sys.setenv(PATH = paste(file.path(Sys.getenv("JAVA_HOME"), "bin"), "C:/hadoop/bin", Sys.getenv("PATH"), sep = .Platform$path.sep))
+
+# Jalankan instalasi ini sekali saja bila modul Python belum tersedia.
+python_packages <- c("pyspark", "pandas", "numpy", "matplotlib", "pyarrow", "mongomock")
+missing_packages <- python_packages[!vapply(python_packages, py_module_available, logical(1))]
+if (length(missing_packages) > 0) {
+  py_install(missing_packages, pip = TRUE)
+}
+
+# Samakan Python pekerja Spark dengan Python yang digunakan reticulate.
+python_spark <- py_config()$python
+Sys.setenv(PYSPARK_PYTHON = python_spark, PYSPARK_DRIVER_PYTHON = python_spark,
+           SPARK_LOCAL_IP = "127.0.0.1")
+
+py_run_string(r"(
+import os
+import sys
+# Pekerja Spark memakai Python yang sama dengan sesi ini.
+os.environ['PYSPARK_PYTHON'] = sys.executable
+os.environ['PYSPARK_DRIVER_PYTHON'] = sys.executable
+# Hadoop di Windows memerlukan lokasi winutils dan library native.
+os.environ['HADOOP_HOME'] = 'C:/hadoop'
+os.environ['PATH'] = 'C:/hadoop/bin' + os.pathsep + os.environ.get('PATH', '')
+from pyspark.sql import SparkSession
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import mongomock
+import subprocess
+import pyspark.java_gateway as gateway
+
+# RStudio Windows kadang tidak menyediakan handle keluaran untuk proses Java.
+_popen_awal = gateway.Popen
+def _popen_spark(*args, **kwargs):
+    if kwargs.get('stdout') is None:
+        kwargs['stdout'] = subprocess.DEVNULL
+    if kwargs.get('stderr') is None:
+        kwargs['stderr'] = subprocess.DEVNULL
+    return _popen_awal(*args, **kwargs)
+gateway.Popen = _popen_spark
+
+try:
+    spark = (
+        SparkSession.builder
+        .master('local[2]')
+        .appName('UTS_BayarYuk')
+        .config('spark.sql.shuffle.partitions', '8')
+        .config('spark.ui.enabled', 'false')
+        .config('spark.driver.host', '127.0.0.1')
+        .config('spark.driver.bindAddress', '127.0.0.1')
+        .getOrCreate()
+    )
+finally:
+    gateway.Popen = _popen_awal
+sc = spark.sparkContext
+)")
+
+spark <- py$spark
+sc <- py$sc
+```
+
+```{r uts-data, eval=FALSE}
+py_run_string(r"(
+import os
+import json
+import random
+import shutil
+import tempfile
+from datetime import datetime, timedelta
+
+# Gunakan seed tetap agar data yang dibuat selalu sama.
+SEED = 3331
+random.seed(SEED)
+
+# Buat folder baru setiap kali agar data sebelumnya tetap aman.
+data_root = tempfile.mkdtemp(prefix='data_bayaryuk_', dir=os.getcwd())
+
+jalur_log = os.path.join(data_root, 'jalur_log.txt')
+landing_dir = os.path.join(data_root, 'landing')
+output_parquet = os.path.join(data_root, 'parquet_valid')
+checkpoint_dir = os.path.join(data_root, 'checkpoint')
+os.makedirs(landing_dir, exist_ok=True)
+
+# Merchant MongoDB tiruan: 200 dokumen.
+kategori_list = ['Kuliner', 'Fashion', 'Elektronik', 'Transportasi', 'Kesehatan']
+kota_list = ['Bandung', 'Jakarta', 'Surabaya', 'Yogyakarta', 'Medan']
+promo_list = ['cashback', 'diskon', 'gratis_ongkir']
+merchant_rows = []
+
+for nomor in range(1, 201):
+    merchant = {
+        '_id': f'M{nomor:03d}',
+        'nama': f'Merchant {nomor:03d}',
+        'kategori': kategori_list[(nomor - 1) % len(kategori_list)],
+        'kota': kota_list[(nomor - 1) % len(kota_list)],
+        'rating': round(random.uniform(3.0, 5.0), 1),
+        'promo': random.sample(promo_list, k=random.randint(0, 2))
+    }
+    if nomor % 10 <= 2:
+        merchant['jam_buka'] = f'{random.randint(7, 10):02d}:00'
+    merchant_rows.append(merchant)
+
+mongo_client = mongomock.MongoClient()
+db = mongo_client['bayaryuk']
+merchant_collection = db['merchant']
+merchant_collection.insert_many(merchant_rows)
+
+# Log transaksi: 400.000 baris, dengan satu baris rusak setiap 5.000 baris.
+awal_waktu = datetime(2026, 10, 1, 0, 0, 0)
+status_list = ['SUKSES', 'GAGAL', 'PENDING']
+with open(jalur_log, 'w', encoding='utf-8') as log_file:
+    for nomor in range(1, 400001):
+        if nomor % 5000 == 0:
+            log_file.write('BARIS_RUSAK\n')
+            continue
+        waktu = awal_waktu + timedelta(seconds=nomor * 11)
+        merchant_id = f'M{random.randint(1, 200):03d}'
+        nominal = random.randint(1_000, 2_000_000)
+        if nomor % 997 == 0:
+            nominal = -random.randint(1_000, 100_000)
+        elif nomor % 1231 == 0:
+            nominal = 250_000_000
+        status = random.choices(status_list, weights=[78, 12, 10], k=1)[0]
+        log_file.write(
+            f'{waktu:%Y-%m-%d %H:%M:%S}|TRX{nomor:07d}|U{random.randint(1, 50000):05d}|'
+            f'{merchant_id}|{nominal}|{status}\n'
+        )
+
+# Landing zone: tiga file JSON, masing-masing 500 event.
+for nomor_file in range(1, 4):
+    file_landing = os.path.join(landing_dir, f'events_{nomor_file}.json')
+    with open(file_landing, 'w', encoding='utf-8') as landing_file:
+        for nomor_event in range(1, 501):
+            event = {
+                'id_trx': f'STR{nomor_file}{nomor_event:04d}',
+                'id_merchant': f'M{random.randint(1, 200):03d}',
+                'nominal': None if random.random() < 0.03 else random.randint(1_000, 2_000_000),
+                'waktu': (awal_waktu + timedelta(minutes=nomor_event)).strftime('%Y-%m-%d %H:%M:%S')
+            }
+            landing_file.write(json.dumps(event) + '\n')
+
+print('Dataset BayarYuk siap dibuat di:', data_root)
+print('Log transaksi:', jalur_log)
+print('Landing zone:', landing_dir)
+)")
+
+# Objek Python dapat diakses dari chunk R melalui py$.
+merchant_collection <- py$merchant_collection
+jalur_log <- py$jalur_log
+landing_dir <- py$landing_dir
+output_parquet <- py$output_parquet
+checkpoint_dir <- py$checkpoint_dir
+```
+
+## C1 – Kueri dan Agregasi NoSQL
+
+C1 menggunakan MongoDB untuk menyaring merchant, memeriksa field yang tersedia, dan membuat ringkasan per kategori.
+
+### C1(a) – Mencari merchant Kuliner di Bandung
+
+**Yang dikerjakan:** Kode mencari merchant dengan kategori Kuliner, kota Bandung, promo cashback, dan rating minimal 4,0. Filter dilakukan langsung di MongoDB supaya data yang ditampilkan hanya yang memenuhi semua syarat.
+
+```{r c1a, eval=FALSE}
+# Filter dilakukan langsung di MongoDB supaya hanya merchant yang sesuai yang ditampilkan.
+py_run_string(r"(
+c1a_rows = list(
+    merchant_collection.find(
+        {'kategori': 'Kuliner', 'kota': 'Bandung', 'promo': 'cashback', 'rating': {'$gte': 4.0}},
+        {'_id': 0, 'nama': 1, 'rating': 1, 'promo': 1}
+    ).sort('rating', -1)
+)
+# Daftar promo dijadikan teks supaya setiap merchant tampil dalam satu baris.
+for merchant in c1a_rows:
+    merchant['promo'] = ', '.join(merchant.get('promo', []))
+c1a_json = json.dumps(c1a_rows, ensure_ascii=False)
+)")
+# Ubah hasil menjadi tabel R sebelum ditampilkan.
+c1a_tabel <- jsonlite::fromJSON(py$c1a_json)
+if (is.data.frame(c1a_tabel) && nrow(c1a_tabel) > 0) {
+  knitr::kable(c1a_tabel, caption = "Merchant Kuliner Bandung dengan promo cashback dan rating minimal 4,0")
+} else {
+  cat("Tidak ada merchant yang memenuhi kriteria.")
+}
+```
+
+**Penjelasan output:** Output berupa tabel nama merchant beserta rating dan promonya. Merchant dengan rating tertinggi ditampilkan lebih dahulu. Jika tabel kosong, berarti tidak ada data yang memenuhi seluruh syarat.
+
+### C1(b) – Menghitung merchant yang memiliki jam buka
+
+**Yang dikerjakan:** Pemeriksaan `$exists` digunakan untuk mengetahui apakah informasi `jam_buka` tersedia pada dokumen, tanpa harus melihat masing-masing merchant secara manual.
+
+```{r c1b, eval=FALSE}
+# $exists menghitung dokumen yang benar-benar mempunyai field jam_buka.
+py_run_string("jumlah_jam_buka = merchant_collection.count_documents({'jam_buka': {'$exists': True}})")
+paste("Jumlah merchant yang memiliki field jam_buka:", py$jumlah_jam_buka)
+```
+
+**Penjelasan output:** Output berupa satu angka jumlah merchant yang memiliki field jam buka. Berdasarkan aturan pembangkit data, jumlah yang diharapkan adalah 60 merchant.
+
+### C1(c) – Membandingkan jumlah merchant dan rata-rata rating
+
+**Yang dikerjakan:** Aggregation pipeline mengelompokkan merchant menurut kategori melalui `$group`, menghitung jumlah dengan `$sum`, menghitung rata-rata rating dengan `$avg`, dan mengurutkan dari rating tertinggi memakai `$sort`.
+
+```{r c1c, eval=FALSE}
+# Pipeline ini menghitung jumlah merchant dan rata-rata rating di setiap kategori.
+py_run_string(r"(
+c1c_pipeline = [
+    {'$group': {'_id': '$kategori', 'jumlah_merchant': {'$sum': 1}, 'rata_rata_rating': {'$avg': '$rating'}}},
+    {'$project': {'_id': 0, 'kategori': '$_id', 'jumlah_merchant': 1, 'rata_rata_rating': 1}},
+    {'$sort': {'rata_rata_rating': -1}}
+]
+c1c_rows = list(merchant_collection.aggregate(c1c_pipeline))
+for kategori in c1c_rows:
+    kategori['rata_rata_rating'] = round(kategori['rata_rata_rating'], 2)
+c1c_json = json.dumps(c1c_rows, ensure_ascii=False)
+)")
+# Tampilkan satu baris untuk setiap kategori.
+c1c_tabel <- jsonlite::fromJSON(py$c1c_json)
+if (is.data.frame(c1c_tabel) && nrow(c1c_tabel) > 0) {
+  c1c_tabel <- c1c_tabel[, c("kategori", "jumlah_merchant", "rata_rata_rating")]
+  names(c1c_tabel) <- c("Kategori", "Jumlah merchant", "Rata-rata rating")
+  knitr::kable(c1c_tabel, caption = "Jumlah merchant dan rata-rata rating per kategori")
+} else {
+  cat("Belum ada data kategori untuk ditampilkan.")
+}
+```
+
+**Penjelasan output:** Output berupa tabel lima kategori beserta jumlah merchant dan rata-rata rating. Baris paling atas menunjukkan kategori dengan rata-rata rating tertinggi.
+
+### Temuan dan kesimpulan C1
+
+**Temuan:** Tabel C1(a) memperlihatkan merchant yang memenuhi semua kriteria, sedangkan C1(b) dan C1(c) menunjukkan ketersediaan jam buka serta perbandingan rating kategori. Lihat angka pada hasil yang dijalankan untuk menyebutkan kategori dengan rating tertinggi.
+
+**Kesimpulan:** Kueri membantu memilih merchant yang sesuai, sementara agregasi membuat informasi setiap kategori lebih mudah dibandingkan.
+
+## C2 – Pemrosesan Log dengan Spark RDD
+
+C2 mengolah file log menggunakan Spark RDD. Langkah pembersihan dilakukan lebih dahulu supaya hitungan transaksi tidak tercampur baris yang rusak.
+
+### C2(a) – Membaca log dan memisahkan baris rusak
+
+**Yang dikerjakan:** Setiap baris log dipisahkan menjadi enam bagian. Baris dengan format salah atau nominal yang tidak bisa menjadi bilangan bulat dibuang, sementara accumulator mencatat jumlah baris rusak. RDD hasil pembersihan disimpan dalam cache agar dapat digunakan lagi.
+
+```{r c2a, eval=FALSE}
+py_run_string(r"(
+# Accumulator dipakai untuk mencatat baris log yang rusak tanpa mengambil data mentah ke driver.
+baris_rusak = sc.accumulator(0)
+
+def parse_transaksi(line):
+    bagian = line.strip().split('|')
+    if len(bagian) != 6:
+        baris_rusak.add(1)
+        return None
+    try:
+        waktu, id_trx, id_user, id_merchant, nominal, status = bagian
+        return (waktu, id_trx, id_user, id_merchant, int(nominal), status)
+    except ValueError:
+        baris_rusak.add(1)
+        return None
+
+transaksi_rdd = sc.textFile(jalur_log).map(parse_transaksi).filter(lambda baris: baris is not None).cache()
+jumlah_transaksi_valid = transaksi_rdd.count()
+jumlah_baris_rusak = baris_rusak.value
+)")
+data.frame(keterangan = c("Transaksi valid", "Baris rusak"), jumlah = c(py$jumlah_transaksi_valid, py$jumlah_baris_rusak)) |> knitr::kable()
+```
+
+**Penjelasan output:** Output menunjukkan banyaknya transaksi yang berhasil dibaca dan jumlah baris rusak. Dari aturan pembangkit data, seharusnya ada 399.920 transaksi valid secara format dan 80 baris rusak. Nominal negatif atau ekstrem belum dibuang pada langkah ini.
+
+### C2(b) – Menghitung transaksi berdasarkan status
+
+**Yang dikerjakan:** Status SUKSES, GAGAL, dan PENDING dihitung menggunakan `reduceByKey()`. Cara ini menggabungkan hitungan per kunci sebelum hasil ringkasannya diambil, sehingga tidak perlu mengambil seluruh data mentah.
+
+```{r c2b, eval=FALSE}
+py_run_string(r"(
+# reduceByKey menjumlahkan transaksi per status secara terdistribusi.
+status_rows = transaksi_rdd.map(lambda baris: (baris[5], 1)).reduceByKey(lambda total, nilai: total + nilai).collect()
+status_rows = sorted(status_rows, key=lambda item: item[1], reverse=True)
+c2b_json = json.dumps([{'status': status, 'jumlah': jumlah} for status, jumlah in status_rows])
+)")
+# Tampilkan hasil sebagai tabel agar setiap status mudah dibandingkan.
+c2b_tabel <- jsonlite::fromJSON(py$c2b_json)
+names(c2b_tabel) <- c("Status", "Jumlah transaksi")
+knitr::kable(c2b_tabel, caption = "Jumlah transaksi berdasarkan status")
+```
+
+**Penjelasan output:** Output berupa tabel jumlah transaksi untuk tiap status. Jumlah ketiga status seharusnya sama dengan jumlah transaksi hasil C2(a).
+
+### C2(c) – Mencari lima merchant dengan kegagalan tertinggi
+
+**Yang dikerjakan:** Kode menjumlahkan total transaksi dan banyaknya status GAGAL pada setiap merchant. Hanya merchant dengan minimal 1.500 transaksi yang dipertahankan. Persentase gagal dihitung dari transaksi gagal dibagi total transaksi lalu dikalikan 100.
+
+```{r c2c, eval=FALSE}
+py_run_string(r"(
+# Setiap merchant dihitung total transaksi dan total GAGAL-nya, lalu dipilih lima yang tertinggi.
+ringkasan_merchant = (
+    transaksi_rdd
+    .map(lambda baris: (baris[3], (1, 1 if baris[5] == 'GAGAL' else 0)))
+    .reduceByKey(lambda kiri, kanan: (kiri[0] + kanan[0], kiri[1] + kanan[1]))
+    .filter(lambda item: item[1][0] >= 1500)
+    .map(lambda item: (item[0], item[1][0], item[1][1], round(item[1][1] / item[1][0] * 100, 2)))
+)
+c2c_rows = ringkasan_merchant.takeOrdered(5, key=lambda item: -item[3])
+c2c_json = json.dumps([{'merchant': m, 'total': total, 'gagal': gagal, 'persen': persen}
+                       for m, total, gagal, persen in c2c_rows])
+)")
+# Tampilkan satu merchant pada setiap baris.
+c2c_tabel <- jsonlite::fromJSON(py$c2c_json)
+if (is.data.frame(c2c_tabel) && nrow(c2c_tabel) > 0) {
+  names(c2c_tabel) <- c("ID merchant", "Total transaksi", "Transaksi gagal", "Gagal (%)")
+  knitr::kable(c2c_tabel, caption = "Lima merchant dengan tingkat kegagalan tertinggi")
+} else {
+  cat("Tidak ada merchant yang memenuhi batas minimal transaksi.")
+}
+```
+
+**Penjelasan output:** Output menampilkan lima ID merchant dengan persentase gagal tertinggi, berikut total transaksi dan jumlah gagalnya. Angka persentase lebih cocok untuk membandingkan merchant daripada sekadar jumlah gagal.
+
+### Temuan dan kesimpulan C2
+
+**Temuan:** C2(a) memisahkan baris rusak; C2(b) menunjukkan jumlah setiap status; C2(c) menunjukkan merchant dengan persentase transaksi gagal tertinggi. Angka pastinya dibaca setelah ketiga kode berhasil dijalankan.
+
+**Kesimpulan:** Pembersihan format perlu dilakukan sebelum menghitung status dan membandingkan tingkat kegagalan merchant.
+
+## C3 – Analisis dengan Spark DataFrame dan SQL
+
+C3 mengubah data menjadi DataFrame lalu menganalisis transaksi sukses berdasarkan informasi merchant.
+
+### C3(a) – Mengubah RDD menjadi DataFrame
+
+**Yang dikerjakan:** Data dari RDD diubah menjadi DataFrame dengan skema eksplisit. Kolom waktu dibuat bertipe `timestamp`, nominal dibuat `long`, dan kolom identitas maupun status menggunakan `string`.
+
+```{r c3a, eval=FALSE}
+py_run_string(r"(
+from pyspark.sql.types import StructType, StructField, StringType, LongType, TimestampType
+from pyspark.sql import functions as F
+from pyspark.sql.window import Window
+
+# Skema eksplisit memastikan waktu menjadi timestamp dan nominal menjadi long.
+skema_transaksi = StructType([
+    StructField('waktu', TimestampType(), False),
+    StructField('id_trx', StringType(), False),
+    StructField('id_user', StringType(), False),
+    StructField('id_merchant', StringType(), False),
+    StructField('nominal', LongType(), False),
+    StructField('status', StringType(), False)
+])
+transaksi_df = spark.createDataFrame(
+    transaksi_rdd.map(lambda baris: (datetime.strptime(baris[0], '%Y-%m-%d %H:%M:%S'), baris[1], baris[2], baris[3], int(baris[4]), baris[5])),
+    skema_transaksi
+)
+transaksi_df.printSchema()
+transaksi_df.show(8, truncate=False)
+)")
+```
+
+**Penjelasan output:** Output `printSchema()` memperlihatkan tipe setiap kolom, sedangkan `show()` memperlihatkan beberapa contoh baris supaya strukturnya dapat diperiksa.
+
+### C3(b) – Menggabungkan merchant dengan transaksi sukses
+
+**Yang dikerjakan:** Data merchant dibuat menjadi DataFrame kecil yang hanya memuat ID, kategori, dan kota. Data tersebut kemudian digabung dengan transaksi berstatus SUKSES dengan nominal lebih dari nol dan kurang dari Rp50 juta. `broadcast()` membantu karena data merchant jauh lebih kecil.
+
+```{r c3b, eval=FALSE}
+py_run_string(r"(
+# Data merchant dibuat kecil lalu dibroadcast saat join dengan data transaksi yang besar.
+merchant_rows_spark = [(m['_id'], m['kategori'], m['kota']) for m in merchant_collection.find({}, {'_id': 1, 'kategori': 1, 'kota': 1})]
+merchant_df = spark.createDataFrame(merchant_rows_spark, ['id_merchant', 'kategori', 'kota'])
+
+transaksi_valid_df = transaksi_df.filter(
+    (F.col('status') == 'SUKSES') &
+    (F.col('nominal') > 0) &
+    (F.col('nominal') < 50000000)
+)
+transaksi_join_df = transaksi_valid_df.join(F.broadcast(merchant_df), 'id_merchant', 'inner')
+transaksi_join_df.show(8, truncate=False)
+)")
+```
+
+**Penjelasan output:** Output memperlihatkan contoh transaksi sukses yang sudah mempunyai tambahan informasi kota dan kategori merchant. Nominal tidak valid tidak dimasukkan pada analisis ini.
+
+### C3(c) – Menghitung total nominal per kota dan kategori
+
+**Yang dikerjakan:** Transaksi yang sudah digabung dikelompokkan berdasarkan kota dan kategori, lalu nominalnya dijumlahkan dengan `sum()`. Data yang dibawa ke R hanya tabel hasil ringkasannya.
+
+```{r c3c, eval=FALSE}
+py_run_string(r"(
+# Agregasi selesai di Spark; yang dibawa ke R hanya tabel ringkasan yang kecil.
+total_kota_kategori_df = (
+    transaksi_join_df
+    .groupBy('kota', 'kategori')
+    .agg(F.sum('nominal').alias('total_nominal'))
+    .orderBy('kota', 'kategori')
+)
+# Hanya hasil agregasi yang kecil dikirim untuk dibuat tabel.
+c3c_json = json.dumps([baris.asDict() for baris in total_kota_kategori_df.collect()], ensure_ascii=False)
+)")
+c3c_tabel <- jsonlite::fromJSON(py$c3c_json)
+if (is.data.frame(c3c_tabel) && nrow(c3c_tabel) > 0) {
+  names(c3c_tabel) <- c("Kota", "Kategori", "Total nominal (Rp)")
+  knitr::kable(c3c_tabel, caption = "Total nominal per kota dan kategori", format.args = list(big.mark = ".", decimal.mark = ","))
+} else {
+  cat("Tidak ada transaksi yang memenuhi kriteria.")
+}
+```
+
+**Penjelasan output:** Output berupa tabel total nominal transaksi pada setiap kombinasi kota dan kategori. Tabel ini membantu membandingkan kontribusi nominal dari setiap kelompok.
+
+### C3(d) – Mengambil kategori dengan nominal tertinggi di setiap kota
+
+**Yang dikerjakan:** Window function digunakan untuk menghitung total nominal satu kota, menghitung porsi setiap kategori, lalu menentukan peringkat kategori pada kota tersebut.
+
+```{r c3d, eval=FALSE}
+py_run_string(r"(
+# Window menghitung total kota dan menentukan kategori dengan nominal paling tinggi di kota tersebut.
+jendela_kota = Window.partitionBy('kota')
+jendela_ranking = Window.partitionBy('kota').orderBy(F.desc('total_nominal'))
+
+kategori_teratas_df = (
+    total_kota_kategori_df
+    .withColumn('total_nominal_kota', F.sum('total_nominal').over(jendela_kota))
+    .withColumn('porsi_persen', F.round(F.col('total_nominal') / F.col('total_nominal_kota') * 100, 2))
+    .withColumn('urutan', F.row_number().over(jendela_ranking))
+    .filter(F.col('urutan') == 1)
+    .select('kota', 'kategori', 'total_nominal', 'porsi_persen')
+    .orderBy('kota')
+)
+c3d_json = json.dumps([baris.asDict() for baris in kategori_teratas_df.collect()], ensure_ascii=False)
+)")
+c3d_tabel <- jsonlite::fromJSON(py$c3d_json)
+if (is.data.frame(c3d_tabel) && nrow(c3d_tabel) > 0) {
+  names(c3d_tabel) <- c("Kota", "Kategori", "Total nominal (Rp)", "Porsi (%)")
+  knitr::kable(c3d_tabel, caption = "Kategori teratas di setiap kota", format.args = list(big.mark = ".", decimal.mark = ","))
+} else cat("Tidak ada hasil untuk ditampilkan.")
+```
+
+**Penjelasan output:** Output menunjukkan kategori urutan pertama di setiap kota serta persentasenya. Pada generator data yang digunakan, setiap kota berpasangan dengan satu kategori, sehingga porsi kategori teratas diperkirakan menjadi 100% untuk setiap kota; ini sifat dataset simulasi.
+
+### Temuan dan kesimpulan C3
+
+**Temuan:** Hasil C3 menunjukkan total nominal transaksi sukses yang memenuhi kriteria untuk setiap kota dan kategori. Kategori teratas serta porsinya dapat dilihat pada tabel C3(d).
+
+**Kesimpulan:** Penggabungan data transaksi dan merchant membantu melihat kontribusi nominal menurut kota dan kategori. Polanya perlu dibaca sesuai karakter dataset simulasi.
+
+## C4 – Ingestion dengan Structured Streaming
+
+C4 mensimulasikan masuknya transaksi baru dari file JSON, lalu menyimpan data valid dalam Parquet.
+
+### C4 – Memproses data JSON dengan Structured Streaming
+
+**Yang dikerjakan:** Streaming membaca file JSON dengan skema yang ditentukan di awal. Setiap batch memisahkan nominal null sebagai tidak valid, menyimpan event yang valid menjadi Parquet, dan mencatat jumlah valid maupun tidak valid. Checkpoint menyimpan progres pemrosesan.
+
+```{r c4, eval=FALSE}
+py_run_string(r"(
+# Schema JSON dibuat eksplisit supaya tipe kolom streaming selalu konsisten.
+schema_stream = StructType([
+    StructField('id_trx', StringType(), False),
+    StructField('id_merchant', StringType(), False),
+    StructField('nominal', LongType(), True),
+    StructField('waktu', TimestampType(), True)
+])
+catatan_batch = []
+catatan_path = os.path.join(data_root, 'catatan_batch_c4.jsonl')
+
+def proses_batch(batch_df, id_batch):
+    data_valid = batch_df.filter(F.col('nominal').isNotNull())
+    data_tidak_valid = batch_df.filter(F.col('nominal').isNull())
+    jumlah_valid = data_valid.count()
+    jumlah_tidak_valid = data_tidak_valid.count()
+    if jumlah_valid > 0:
+        data_valid.write.mode('append').parquet(output_parquet)
+    catatan = {'batch': int(id_batch), 'valid': int(jumlah_valid), 'tidak_valid': int(jumlah_tidak_valid)}
+    catatan_batch.append(catatan)
+    # Simpan ringkasan supaya tabel tetap bisa dibaca saat tidak ada batch baru.
+    with open(catatan_path, 'a', encoding='utf-8') as catatan_file:
+        catatan_file.write(json.dumps(catatan) + '\n')
+
+streaming_df = spark.readStream.schema(schema_stream).option('maxFilesPerTrigger', 1).json(landing_dir)
+query_stream = (
+    streaming_df.writeStream
+    .option('checkpointLocation', checkpoint_dir)
+    .trigger(availableNow=True)
+    .foreachBatch(proses_batch)
+    .start()
+)
+query_stream.awaitTermination()
+
+catatan_tersimpan = []
+if os.path.exists(catatan_path):
+    with open(catatan_path, encoding='utf-8') as catatan_file:
+        catatan_tersimpan = [json.loads(baris) for baris in catatan_file if baris.strip()]
+catatan_batch_json = json.dumps(catatan_tersimpan)
+jumlah_batch_baru = len(catatan_batch)
+total_baris_parquet = spark.read.parquet(output_parquet).count() if os.path.exists(output_parquet) else None
+)")
+catatan_batch_tabel <- jsonlite::fromJSON(py$catatan_batch_json)
+if (is.data.frame(catatan_batch_tabel) && nrow(catatan_batch_tabel) > 0) {
+  catatan_batch_tabel$total <- catatan_batch_tabel$valid + catatan_batch_tabel$tidak_valid
+  names(catatan_batch_tabel) <- c("id_batch", "event_valid", "event_tidak_valid", "total_event")
+  knitr::kable(catatan_batch_tabel, caption = "Catatan hasil setiap micro-batch")
+
+  ringkasan_c4 <- data.frame(
+    Keterangan = c("Batch dalam catatan", "Event dalam catatan",
+                   "Event valid dalam catatan", "Event dengan nominal kosong dalam catatan"),
+    Jumlah = c(nrow(catatan_batch_tabel), sum(catatan_batch_tabel[["total_event"]]),
+               sum(catatan_batch_tabel[["event_valid"]]), sum(catatan_batch_tabel[["event_tidak_valid"]]))
+  )
+  knitr::kable(ringkasan_c4, caption = "Ringkasan batch yang tercatat")
+} else {
+  cat("Belum ada catatan batch tersimpan. Jika dataset ini sudah diproses sebelum pencatatan ditambahkan, hasil per batch tidak dapat ditampilkan ulang dari catatan ini.\n")
+}
+cat("Batch baru pada run ini:", py$jumlah_batch_baru, "\n")
+if (is.null(py$total_baris_parquet)) {
+  cat("Output Parquet belum tersedia.\n")
+} else {
+  cat("Total baris yang tersimpan di Parquet:", py$total_baris_parquet, "\n")
+}
+```
+
+**Penjelasan output:** Tabel pertama menunjukkan ID batch, jumlah event dengan nominal terisi, jumlah event dengan nominal kosong, dan total keduanya. Tabel ringkasan menjumlahkan batch yang tercatat. Nilai **Total baris yang tersimpan di Parquet** adalah jumlah seluruh baris dalam output Parquet, termasuk hasil run sebelumnya jika memakai folder output yang sama.
+
+Pada dataset yang dibuat, terdapat tiga file dengan 500 event per file, yaitu 1.500 event. Saat tiga file diproses seluruhnya dan tercatat, total event di tabel ringkasan diharapkan 1.500. Kode ini hanya memeriksa apakah nominal kosong; angka nol atau negatif tidak diperiksa sebagai tidak valid dalam C4. Checkpoint dapat membuat jumlah batch baru menjadi nol saat kode dijalankan lagi; tabel tetap tampil jika catatan batch sebelumnya tersedia. Dataset yang diproses sebelum fitur pencatatan ditambahkan perlu diproses pada folder dataset baru untuk menghasilkan catatan per batch.
+
+### Temuan dan kesimpulan C4
+
+**Temuan:** Tabel micro-batch menunjukkan banyaknya event dengan nominal terisi dan nominal kosong. Jumlah sebenarnya dapat dilihat setelah streaming selesai.
+
+**Kesimpulan:** Validasi memisahkan event yang belum lengkap sebelum event valid disimpan dalam format Parquet.
+
+## C5 – EDA Skala Besar dan Insight
+
+C5 memeriksa kualitas data, menghitung ringkasan nominal, dan mengamati jam transaksi sukses.
+
+### C5(a) – Memeriksa kualitas data transaksi
+
+**Yang dikerjakan:** Dalam satu `select()`, kode menghitung nominal negatif, nominal minimal Rp50 juta, dan transaksi dengan status PENDING. Ketiganya memberi gambaran kualitas data yang perlu diperhatikan.
+
+```{r c5a, eval=FALSE}
+py_run_string(r"(
+# Seluruh indikator kualitas dihitung dalam satu select agar hanya satu lintasan data yang diperlukan.
+kualitas_data_df = transaksi_df.select(
+    F.sum(F.when(F.col('nominal') < 0, 1).otherwise(0)).alias('nominal_negatif'),
+    F.sum(F.when(F.col('nominal') >= 50000000, 1).otherwise(0)).alias('nominal_ekstrem'),
+    F.sum(F.when(F.col('status') == 'PENDING', 1).otherwise(0)).alias('status_pending')
+)
+kualitas_json = json.dumps([baris.asDict() for baris in kualitas_data_df.collect()])
+)")
+kualitas_hasil <- jsonlite::fromJSON(py$kualitas_json)
+knitr::kable(kualitas_hasil, caption = "Laporan kualitas data transaksi")
+```
+
+**Penjelasan output:** Output berupa tiga indikator beserta jumlahnya. Nominal negatif dan ekstrem menunjukkan data yang perlu diperiksa sebelum menghitung nominal transaksi valid.
+
+### C5(b) – Menghitung persentil nominal valid
+
+**Yang dikerjakan:** Kode menyaring nominal di atas nol dan di bawah Rp50 juta, lalu menggunakan `approxQuantile()` untuk menghitung P5, P50, P95, dan P99 secara efisien.
+
+```{r c5b, eval=FALSE}
+py_run_string(r"(
+# approxQuantile menghitung persentil secara efisien tanpa memindahkan seluruh nominal ke R.
+nominal_valid_df = transaksi_df.filter((F.col('nominal') > 0) & (F.col('nominal') < 50000000))
+nilai_persentil = nominal_valid_df.approxQuantile('nominal', [0.05, 0.50, 0.95, 0.99], 0.01)
+persentil_json = json.dumps([{'persentil': nama, 'nominal': nilai} for nama, nilai in zip(['P5', 'P50', 'P95', 'P99'], nilai_persentil)])
+)")
+persentil_tabel <- jsonlite::fromJSON(py$persentil_json)
+names(persentil_tabel) <- c("Persentil", "Nominal (Rp)")
+knitr::kable(persentil_tabel, caption = "Perkiraan persentil nominal transaksi valid", format.args = list(big.mark = ".", decimal.mark = ","))
+```
+
+**Penjelasan output:** Output menunjukkan perkiraan batas nominal pada persentil 5%, 50%, 95%, dan 99%. P50 dapat dibaca sebagai median nominal transaksi valid.
+
+### C5(c) – Membuat grafik transaksi sukses per jam
+
+**Yang dikerjakan:** Kode menyaring transaksi SUKSES, mengambil jam dari waktu transaksi, menghitung jumlah per jam, lalu membuat grafik batang dari hasil agregasi Spark.
+
+```{r c5c, eval=FALSE}
+py_run_string(r"(
+# Spark menghitung jumlah transaksi sukses per jam; hasil akhirnya hanya sekitar 24 baris.
+sukses_per_jam_df = (
+    transaksi_df
+    .filter(F.col('status') == 'SUKSES')
+    .withColumn('jam', F.hour('waktu'))
+    .groupBy('jam')
+    .agg(F.count('*').alias('jumlah_transaksi'))
+    .orderBy('jam')
+)
+sukses_per_jam_json = json.dumps([baris.asDict() for baris in sukses_per_jam_df.collect()])
+)")
+sukses_per_jam <- jsonlite::fromJSON(py$sukses_per_jam_json)
+
+barplot(
+  height = sukses_per_jam$jumlah_transaksi,
+  names.arg = sukses_per_jam$jam,
+  col = "#e45d9a",
+  border = NA,
+  main = "Jumlah Transaksi SUKSES per Jam",
+  xlab = "Jam",
+  ylab = "Jumlah Transaksi"
+)
+
+jam_puncak <- sukses_per_jam[which.max(sukses_per_jam$jumlah_transaksi), ]
+```
+
+**Penjelasan output:** Output berupa grafik batang jam 0–23. Batang tertinggi memperlihatkan waktu transaksi sukses paling banyak, dan nilainya digunakan pada bagian insight berikutnya.
+
+### C5(d) – Dua insight dari hasil pengolahan
+
+Bagian ini mengambil dua temuan dari hasil C5(a) dan C5(c). Nilai yang ditulis menggunakan *inline R* supaya secara otomatis mengambil angka dari output, bukan mengira-ngira hasilnya.
+
+**Insight 1 – Kualitas nominal transaksi**
+
+**Temuan:** Hasil pemeriksaan menunjukkan ada \[lihat output setelah kode dijalankan\] transaksi dengan nominal negatif dan \[lihat output setelah kode dijalankan\] transaksi dengan nominal minimal Rp50 juta.
+
+**Bukti:** Jumlah tersebut berasal dari tabel kualitas data C5(a), yang menghitung indikator masalah nominal secara langsung dari DataFrame transaksi.
+
+**Rekomendasi:** Pemeriksaan nominal perlu dilakukan sebelum data dipakai untuk analisis berikutnya, supaya nilai yang tidak wajar tidak memengaruhi ringkasan nominal transaksi.
+
+**Insight 2 – Jam transaksi sukses terbanyak**
+
+**Temuan:** Jam dengan transaksi SUKSES paling banyak adalah pukul \[lihat output setelah kode dijalankan\]:00, dengan jumlah \[lihat output setelah kode dijalankan\] transaksi.
+
+**Bukti:** Nilainya terlihat pada hasil hitungan dan batang tertinggi dalam grafik transaksi SUKSES per jam pada C5(c).
+
+**Rekomendasi:** Jam yang lebih ramai dapat dijadikan bahan pertimbangan dalam menyiapkan kapasitas dan pemantauan sistem, supaya layanan tetap stabil ketika aktivitas transaksi meningkat.
+
+### Temuan dan kesimpulan C5
+
+**Temuan:** Tabel kualitas menampilkan jumlah nominal bermasalah, sementara persentil dan grafik membantu memahami sebaran nominal serta waktu transaksi sukses. Isi nilai temuan menggunakan output yang benar-benar muncul.
+
+**Kesimpulan:** Pemeriksaan kualitas dan pola transaksi membantu menentukan data yang layak dianalisis serta waktu yang perlu mendapat perhatian.
+
+## Kesimpulan Bagian C
+
+Pada praktik ini, data merchant dan transaksi berhasil diproses melalui beberapa tahapan yang saling berkaitan. MongoDB dipakai untuk mencari serta meringkas merchant, Spark RDD untuk membersihkan log dan menghitung status transaksi, Spark DataFrame untuk menggabungkan data dan menghitung total nominal, serta Structured Streaming untuk memproses transaksi baru. Hasil EDA membantu memperlihatkan masalah kualitas data dan pola transaksi berdasarkan jam.
+
+Kesimpulan angka dan grafik akhir perlu dilihat setelah semua chunk berhasil dijalankan, karena isi tabel harus sesuai dengan dataset yang benar-benar diproses.
+
+# Bagian D - Rencana Presentasi Video
+
+| Segmen | Target durasi | Catatan yang akan disampaikan |
+|----|---:|----|
+| Pembukaan: nama, NIM, kelas, judul | 0,5 menit | \[ISI POIN BICARA\] |
+| Gambaran kasus dan sumber data | 1 menit | \[ISI POIN BICARA\] |
+| Demonstrasi C1-C5 beserta output | 6 menit | \[ISI POIN BICARA\] |
+| Dua insight dan rekomendasi | 1,5 menit | \[ISI POIN BICARA\] |
+| Penutup: kendala dan pembelajaran | 0,5 menit | \[ISI POIN BICARA\] |
+
+# Checklist Sebelum Dikumpulkan
+
+- [ ] Nama, NIM, kelas, dan tautan video telah diisi.
+- [ ] Chunk `setup-spark` dan `uts-data` berasal dari file resmi dan tidak diubah.
+- [ ] Semua jawaban A-B menggunakan kalimat sendiri.
+- [ ] Semua C1-C5 sudah menghasilkan output dan interpretasi.
+- [ ] Tidak ada `collect()` atau `toPandas()` pada data mentah.
+- [ ] Dokumen berhasil di-Knit tanpa error.
+- [ ] Video YouTube maksimal 10 menit, dapat diakses Publik atau Unlisted, dan selaras dengan file Rmd.

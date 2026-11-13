@@ -1,0 +1,7 @@
+"0","# $exists menghitung dokumen yang benar-benar mempunyai field jam_buka."
+"0","py_run_string(""jumlah_jam_buka = merchant_collection.count_documents({'jam_buka': {'$exists': True}})"")"
+"0","paste(""Jumlah merchant yang memiliki field jam_buka:"", py$jumlah_jam_buka)"
+"1","[1]"
+"1"," ""Jumlah merchant yang memiliki field jam_buka: 60"""
+"1","
+"

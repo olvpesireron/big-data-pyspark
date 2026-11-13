@@ -1,0 +1,12 @@
+"0","# Filter dilakukan langsung di MongoDB supaya hanya merchant yang sesuai yang ditampilkan."
+"0","py_run_string(r""("
+"0","c1a_df = pd.DataFrame(list("
+"0","    merchant_collection.find("
+"0","        {'kategori': 'Kuliner', 'kota': 'Bandung', 'promo': 'cashback', 'rating': {'$gte': 4.0}},"
+"0","        {'_id': 0, 'nama': 1, 'rating': 1, 'promo': 1}"
+"0","    ).sort('rating', -1)"
+"0","))"
+"0",")"")"
+"2","Error in py_run_string(""\nc1a_df = pd.DataFrame(list(\n    merchant_collection.find(\n        {'kategori': 'Kuliner', 'kota': 'Bandung', 'promo': 'cashback', 'rating': {'$gte': 4.0}},\n        {'_id': 0, 'nama': 1, 'rating': 1, 'promo': 1}\n    ).sort('rating', -1)\n))\n"") : 
+  could not find function ""py_run_string""
+"
